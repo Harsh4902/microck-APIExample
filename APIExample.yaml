@@ -1,0 +1,17 @@
+$schema: https://microcks.io/schemas/APIExamples-v1alpha1-schema.json
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: Calc
+  version: 1.0
+operations:
+  'GET /calc/add/{lhs}/{rhs}':
+    One and one:
+      request:
+        parameters:
+          lhs: 1
+          rhs: 1
+      response:
+        mediaType: application/json
+        body:
+          result: 2
