@@ -1,0 +1,5 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIMetadata
+metadata:
+  name: Example API
+  version: 1.1.0
