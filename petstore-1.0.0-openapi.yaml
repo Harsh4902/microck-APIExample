@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: Petstore API
-  version: 1.0.0
+  version: 2.0.0
   description: |-
     A sample API that uses a petstore as an example to demonstrate features
     in the OpenAPI 3.0 specification and Microcks
