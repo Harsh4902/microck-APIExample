@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Library API
+  description: API for managing a library's collection of books.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+
+paths:
+  /books:
+    summary: Global operations on books
+    get:
+      operationId: GetBooks
+      summary: Get list of books
+      responses:
+        "200":
+          description: Get List of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items: "#/componets/schemas/Book"
+              examples:
+                all_books:
+                  value:
+                  - id: 123
+                    title: "Adventures of Tom Sawyer"
+                    author: "Mark Twain"
+                  - id: 125
+                    title: "Around the World in eighty days"
+                    author: "Jules Verne"
+                  - id: 127
+                    title: "Discovery of India"
+                    author: "Jawaharlal Nehru"
+
+  /books/{id}: 
+    summary: specific operation on books
+    get:
+      operationId: GetBookById
+      summary: retrive a book with specific id
+      parameters:
+      - examples:
+          123:
+            value: 123
+          125:
+            value: 125
+          127:
+            value: 127
+        name: id
+        description: book id
+        schema:
+          type: integer
+        in: path
+        required: true 
+      responses:
+        "200":
+          description: get book with specific id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+              examples:
+                123:
+                  value:
+                    id: 123
+                    title: Adventures of Tom Sawyer
+                    author: Mark Twain
+                125:
+                  value:
+                    id: 125
+                    title: Around the World in eighty days
+                    author: Jules Verne
+                127:
+                  value:
+                    id: 127
+                    title: Discovery of India
+                    author: Jawaharlal Nehru
+  
+components:
+  schemas:
+    Book:
+      title: Root for Book
+      description: The root of the Book type's schema.
+      type: object
+      properties:
+        id:
+          description: unique id of the book
+          type: integer
+        title:
+          description: title of the book
+          type: string
+        author:
+          description: author of the book
+          type: string
