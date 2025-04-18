@@ -1,0 +1,1309 @@
+openapi: 3.1.0
+info:
+  title: My Service
+  description: My Service Description
+  version: 0.0.0-development
+  contact:
+    name: Test User
+    url: https://google.com
+    email: test@gmail.com
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      description: The user-scoped JWT returned by the Create JWT operation.
+  schemas:
+    GetSimResponse:
+      $id: GetSimResponse
+      title: Sim record
+      description: Information about the SIM
+      type: object
+      properties:
+        id:
+          format: uuid
+          minLength: 36
+          maxLength: 36
+          title: UUID
+          description: a UUID v4 string
+          examples:
+            - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+            - eb53b184-a6c2-431c-a03a-ed31f96af958
+          type: string
+        totalDataUsed:
+          title: Total Data Used
+          description: Total data used for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        totalDataAvailable:
+          title: Total Data Used
+          description: Total data available for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        topUpUrl:
+          format: uri
+          title: Top Up URL
+          description: URL for adding more data to the SIM
+          examples:
+            - https://d9ebjuzfaujqu.cloudfront.net/?ref=foo
+          type: string
+        activatedAt:
+          title: Activated At
+          description: The ISO timestamp from when this SIM was activated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+        updatedAt:
+          title: Updated At
+          description: The ISO timestamp from when this SIM was last updated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+      required:
+        - id
+        - topUpUrl
+        - activatedAt
+        - updatedAt
+      examples:
+        - id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+          totalDataUsed: 10000
+          totalDataAvailable: 100000
+          topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+          activatedAt: 2025-04-14T13:00:00:000Z
+          updatedAt: 2025-04-17T13:59:23:456Z
+    GetSimNotFoundErrorResponse:
+      $id: GetSimNotFoundErrorResponse
+      title: Sim Not Found
+      description: The SIM could not be found
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: SIM not found
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 404
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Not Found
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/NotFound
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+            status: 404
+            title: SIM not found
+            type: https://my.service.com/errors/NotFound
+    GetSimForbiddenErrorResponse:
+      $id: GetSimForbiddenErrorResponse
+      title: Access Denied
+      description: Forbidden. Your JWT is invalid or expired. Or you do not have the
+        permissions required to perform this action.
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: Forbidden. Your JWT is invalid or expired. Or you do not have the
+                permissions required to perform this action.
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 403
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Access Denied
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/AccessDenied
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Access denied
+            status: 403
+            title: Forbidden
+            type: https://my.service.com/errors/Forbidden
+    GetSimsResponse:
+      $id: GetSimsResponse
+      title: Gets Sims
+      description: Gets sims for the team
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                format: uuid
+                minLength: 36
+                maxLength: 36
+                title: UUID
+                description: a UUID v4 string
+                examples:
+                  - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+                  - eb53b184-a6c2-431c-a03a-ed31f96af958
+                type: string
+              totalDataUsed:
+                title: Total Data Used
+                description: Total data used for this SIM in bytes
+                examples:
+                  - 0
+                  - 1000
+                  - 1231288
+                type: number
+              totalDataAvailable:
+                title: Total Data Used
+                description: Total data available for this SIM in bytes
+                examples:
+                  - 0
+                  - 1000
+                  - 1231288
+                type: number
+              topUpUrl:
+                format: uri
+                title: Top Up URL
+                description: URL for adding more data to the SIM
+                examples:
+                  - https://d9ebjuzfaujqu.cloudfront.net/?ref=foo
+                type: string
+              activatedAt:
+                title: Activated At
+                description: The ISO timestamp from when this SIM was activated
+                example: 2024-01-17T23:55:49.41Z
+                format: date-time
+                type: string
+              updatedAt:
+                title: Updated At
+                description: The ISO timestamp from when this SIM was last updated
+                example: 2024-01-17T23:55:49.41Z
+                format: date-time
+                type: string
+            required:
+              - id
+              - topUpUrl
+              - activatedAt
+              - updatedAt
+        pageNextToken:
+          title: Page Next Token
+          description: Return this token on subsequent requests to get the next page of
+            results
+          examples:
+            - iwyAIjIwMjMtMDQtMjRUMjI6NDY6MzcuODY0WiID
+          type: string
+        total:
+          title: total
+          description: Total number of sims
+          examples:
+            - 0
+            - 5
+          type: number
+      required:
+        - items
+        - total
+      examples:
+        - items:
+            - id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+              totalDataUsed: 10000
+              totalDataAvailable: 100000
+              topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+              activatedAt: 2025-04-14T13:00:00:000Z
+              updatedAt: 2025-04-17T13:59:23:456Z
+          pageNextToken: iwyAIjIwMjMtMDQtMjRUMjI6NDY6MzcuODY0WiID
+          total: 1
+    GetSimsForbiddenErrorResponse:
+      $id: GetSimsForbiddenErrorResponse
+      title: Access Denied
+      description: Forbidden. Your JWT is invalid or expired. Or you do not have the
+        permissions required to perform this action.
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: Forbidden. Your JWT is invalid or expired. Or you do not have the
+                permissions required to perform this action.
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 403
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Access Denied
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/AccessDenied
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Access denied
+            status: 403
+            title: Forbidden
+            type: https://my.service.com/errors/Forbidden
+    CreateSimResponse:
+      $id: CreateSimResponse
+      title: Sim record
+      description: Information about the SIM
+      type: object
+      properties:
+        id:
+          format: uuid
+          minLength: 36
+          maxLength: 36
+          title: UUID
+          description: a UUID v4 string
+          examples:
+            - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+            - eb53b184-a6c2-431c-a03a-ed31f96af958
+          type: string
+        totalDataUsed:
+          title: Total Data Used
+          description: Total data used for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        totalDataAvailable:
+          title: Total Data Used
+          description: Total data available for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        topUpUrl:
+          format: uri
+          title: Top Up URL
+          description: URL for adding more data to the SIM
+          examples:
+            - https://d9ebjuzfaujqu.cloudfront.net/?ref=foo
+          type: string
+        activatedAt:
+          title: Activated At
+          description: The ISO timestamp from when this SIM was activated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+        updatedAt:
+          title: Updated At
+          description: The ISO timestamp from when this SIM was last updated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+      required:
+        - id
+        - topUpUrl
+        - activatedAt
+        - updatedAt
+      examples:
+        - id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+          totalDataUsed: 10000
+          totalDataAvailable: 100000
+          topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+          activatedAt: 2025-04-14T13:00:00:000Z
+          updatedAt: 2025-04-17T13:59:23:456Z
+    CreateSimForbiddenErrorResponse:
+      $id: CreateSimForbiddenErrorResponse
+      title: Access Denied
+      description: Forbidden. Your JWT is invalid or expired. Or you do not have the
+        permissions required to perform this action.
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: Forbidden. Your JWT is invalid or expired. Or you do not have the
+                permissions required to perform this action.
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 403
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Access Denied
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/AccessDenied
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Access denied
+            status: 403
+            title: Forbidden
+            type: https://my.service.com/errors/Forbidden
+    CreateSimBadRequestErrorResponse:
+      $id: CreateSimBadRequestErrorResponse
+      title: Bad Request
+      description: The server cannot or will not process the request due to an
+        apparent client error (e.g., malformed request syntax, too large size,
+        invalid request message framing, or deceptive request routing).
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: The server cannot or will not process the request due to an apparent
+                client error (e.g., malformed request syntax, too large size,
+                invalid request message framing, or deceptive request routing).
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 400
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Bad Request
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/BadRequest
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/BadRequest
+            detail: Bad Request
+            status: 400
+            title: Bad Request
+            type: https://my.service.com/errors/BadRequest
+    CreateSimRequest:
+      $id: CreateSimRequest
+      title: Create Sim
+      description: Creates a new Sim for the team
+      type: object
+      properties:
+        eid:
+          title: EID
+          description: Unique identifier for a SIM
+          minLength: 32
+          maxLength: 32
+          example: "89042340123945919234851121239899"
+          type: string
+        puk:
+          title: PUK
+          description: Activation code for a SIM
+          minLength: 8
+          maxLength: 8
+          example: "24948087"
+          type: string
+        firstName:
+          title: First Name
+          description: First name of the user registering the SIM
+          minLength: 1
+          maxLength: 32
+          examples:
+            - Jill
+            - Sarah
+            - Ted
+            - Tomi
+            - Nicholas
+          type: string
+        lastName:
+          title: Last Name
+          description: Last name of the user registering the SIM
+          minLength: 1
+          maxLength: 32
+          examples:
+            - Preston
+            - Logan
+            - Smith
+          type: string
+        email:
+          title: Email
+          description: Email of the user registering the SIM
+          format: email
+          examples:
+            - test-user@gmail.com
+          type: string
+      required:
+        - eid
+        - puk
+        - firstName
+        - lastName
+        - email
+      examples:
+        - eid: "89042340123945919234851121239899"
+          puk: "24948087"
+          firstName: Bill
+          lastName: Preston
+          email: billspresetonesquirethethird@wyldstallyns.co
+    RefreshSimResponse:
+      $id: RefreshSimResponse
+      title: Sim record
+      description: Updated information about the SIM
+      type: object
+      properties:
+        id:
+          format: uuid
+          minLength: 36
+          maxLength: 36
+          title: UUID
+          description: a UUID v4 string
+          examples:
+            - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+            - eb53b184-a6c2-431c-a03a-ed31f96af958
+          type: string
+        totalDataUsed:
+          title: Total Data Used
+          description: Total data used for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        totalDataAvailable:
+          title: Total Data Used
+          description: Total data available for this SIM in bytes
+          examples:
+            - 0
+            - 1000
+            - 1231288
+          type: number
+        topUpUrl:
+          format: uri
+          title: Top Up URL
+          description: URL for adding more data to the SIM
+          examples:
+            - https://d9ebjuzfaujqu.cloudfront.net/?ref=foo
+          type: string
+        activatedAt:
+          title: Activated At
+          description: The ISO timestamp from when this SIM was activated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+        updatedAt:
+          title: Updated At
+          description: The ISO timestamp from when this SIM was last updated
+          example: 2024-01-17T23:55:49.41Z
+          format: date-time
+          type: string
+      required:
+        - id
+        - topUpUrl
+        - activatedAt
+        - updatedAt
+      examples:
+        - id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+          totalDataUsed: 10000
+          totalDataAvailable: 100000
+          topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+          activatedAt: 2025-04-14T13:00:00:000Z
+          updatedAt: 2025-04-17T13:59:23:456Z
+    RefreshSimNotFoundErrorResponse:
+      $id: RefreshSimNotFoundErrorResponse
+      title: Sim Not Found
+      description: The SIM could not be found
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: SIM not found
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 404
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Not Found
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/NotFound
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+            status: 404
+            title: SIM not found
+            type: https://my.service.com/errors/NotFound
+    RefreshSimForbiddenErrorResponse:
+      $id: RefreshSimForbiddenErrorResponse
+      title: Access Denied
+      description: Forbidden. Your JWT is invalid or expired. Or you do not have the
+        permissions required to perform this action.
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: Forbidden. Your JWT is invalid or expired. Or you do not have the
+                permissions required to perform this action.
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 403
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Access Denied
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/AccessDenied
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Access denied
+            status: 403
+            title: Forbidden
+            type: https://my.service.com/errors/Forbidden
+    DeleteSimNotFoundErrorResponse:
+      $id: DeleteSimNotFoundErrorResponse
+      title: Sim Not Found
+      description: The SIM could not be found
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: SIM not found
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 404
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Not Found
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/NotFound
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+            status: 404
+            title: SIM not found
+            type: https://my.service.com/errors/NotFound
+    DeleteSimForbiddenErrorResponse:
+      $id: DeleteSimForbiddenErrorResponse
+      title: Access Denied
+      description: Forbidden. Your JWT is invalid or expired. Or you do not have the
+        permissions required to perform this action.
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            "@context":
+              title: Context
+              description: Link to the problem detail registry
+              format: uri
+              example: https://github.com/my-service/proto/ProblemDetail
+              type: string
+            detail:
+              title: Detail
+              description: Description of the error
+              example: Forbidden. Your JWT is invalid or expired. Or you do not have the
+                permissions required to perform this action.
+              type: string
+            status:
+              title: Status
+              description: HTTP status code
+              example: 403
+              type: number
+            title:
+              title: Title
+              description: Title of the error
+              example: Access Denied
+              type: string
+            type:
+              title: Type
+              description: Link to error details
+              format: uri
+              example: https://my.service.com/errors/AccessDenied
+              type: string
+          required:
+            - "@context"
+            - detail
+            - status
+            - title
+            - type
+      required:
+        - error
+      examples:
+        - error:
+            "@context": https://github.com/my-service/proto/ProblemDetail
+            detail: Access denied
+            status: 403
+            title: Forbidden
+            type: https://my.service.com/errors/Forbidden
+servers:
+  - url: https://api.my-service.servicehost.com/
+paths:
+  /{simId}:
+    get:
+      operationId: GetSim
+      summary: Get SIM
+      description: Gets a single SIM record.
+      tags:
+        - SimTag
+      responses:
+        "200":
+          description: The SIM details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimResponse"
+              examples:
+                GetSimResponseExample:
+                  summary: A SIM record
+                  value:
+                    id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+                    totalDataUsed: 10000
+                    totalDataAvailable: 100000
+                    topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+                    activatedAt: 2025-04-14T13:00:00:000Z
+                    updatedAt: 2025-04-17T13:59:23:456Z
+        "403":
+          description: Access Denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimForbiddenErrorResponse"
+              examples:
+                Forbidden:
+                  summary: Access Denied
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Access denied
+                      status: 403
+                      title: Forbidden
+                      type: https://my.service.com/errors/Forbidden
+        "404":
+          description: SIM not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimNotFoundErrorResponse"
+              examples:
+                Not Found:
+                  summary: SIM not found
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+                      status: 404
+                      title: SIM not found
+                      type: https://my.service.com/errors/NotFound
+      parameters:
+        - in: path
+          examples:
+            GetSimResponseExample:
+              value: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: 9bcbe6f0-ad6e-41b6-b084-5fae92fabdde
+          name: simId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            type: string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+          description: a UUID v4 string
+        - in: query
+          name: teamId
+          examples:
+            GetSimResponseExample:
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            type: string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+          description: a UUID v4 string
+      security:
+        - JWT: []
+    patch:
+      operationId: RefreshSim
+      summary: Refresh SIM
+      description: Refreshes the SIM usage data
+      tags:
+        - SimTag
+      responses:
+        "200":
+          description: The updated SIM details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshSimResponse"
+              examples:
+                RefreshSimResponseExample:
+                  summary: Updated information about the SIM
+                  value:
+                    id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+                    totalDataUsed: 10000
+                    totalDataAvailable: 100000
+                    topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+                    activatedAt: 2025-04-14T13:00:00:000Z
+                    updatedAt: 2025-04-17T13:59:23:456Z
+        "403":
+          description: Access Denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshSimForbiddenErrorResponse"
+              examples:
+                Forbidden:
+                  summary: Access Denied
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Access denied
+                      status: 403
+                      title: Forbidden
+                      type: https://my.service.com/errors/Forbidden
+        "404":
+          description: SIM not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshSimNotFoundErrorResponse"
+              examples:
+                Not Found:
+                  summary: SIM not found
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+                      status: 404
+                      title: SIM not found
+                      type: https://my.service.com/errors/NotFound
+      parameters:
+        - in: path
+          examples:
+            RefreshSimResponseExample:
+              value: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: 9bcbe6f0-ad6e-41b6-b084-5fae92fabdde
+          name: simId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+        - in: query
+          examples:
+            RefreshSimResponseExample:
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+          name: teamId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+      security:
+        - JWT: []
+    delete:
+      operationId: DeleteSim
+      summary: Delete SIM
+      description: Deletes the SIM
+      tags:
+        - SimTag
+      responses:
+        "202":
+          description: Received the request to delete the SIM
+        "403":
+          description: Access Denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSimForbiddenErrorResponse"
+              examples:
+                Forbidden:
+                  summary: Access Denied
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Access denied
+                      status: 403
+                      title: Forbidden
+                      type: https://my.service.com/errors/Forbidden
+        "404":
+          description: SIM not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteSimNotFoundErrorResponse"
+              examples:
+                Not Found:
+                  summary: SIM not found
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Cannot find SIM for id 9cf6c347-fc07-46a2-8dcb-01105369cbab
+                      status: 404
+                      title: SIM not found
+                      type: https://my.service.com/errors/NotFound
+      parameters:
+        - in: path
+          examples:
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: 9bcbe6f0-ad6e-41b6-b084-5fae92fabdde
+          name: simId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+        - in: query
+          examples: 
+            Forbidden: 
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+            Not Found:
+              value: eb53b184-a6c2-431c-a03a-ed31f96af958
+          name: teamId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+      security:
+        - JWT: []
+  /:
+    get:
+      operationId: GetSims
+      summary: Get SIMs
+      description: Gets multiple SIM record.
+      tags:
+        - SimTag
+      responses:
+        "200":
+          description: The SIM details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimsResponse"
+              examples:
+                GetSimsResponseExample:
+                  summary: SIM records
+                  value:
+                    items:
+                      - id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+                        totalDataUsed: 10000
+                        totalDataAvailable: 100000
+                        topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+                        activatedAt: 2025-04-14T13:00:00:000Z
+                        updatedAt: 2025-04-17T13:59:23:456Z
+                    pageNextToken: iwyAIjIwMjMtMDQtMjRUMjI6NDY6MzcuODY0WiID
+                    total: 1
+        "403":
+          description: Access Denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimsForbiddenErrorResponse"
+              examples:
+                Forbidden:
+                  summary: Access Denied
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Access denied
+                      status: 403
+                      title: Forbidden
+                      type: https://my.service.com/errors/Forbidden
+      parameters:
+        - in: query
+          name: teamId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+        - in: query
+          name: pageNextToken
+          required: false
+          schema:
+            minLength: 40
+            maxLength: 40
+            title: Page Next Token
+            description: This is the placeholder for the next page of results. Send it back
+              to get the next page.
+            examples:
+              - iwyAIjIwMjMtMDQtMjRUMjI6NDY6MzcuODY0WiID
+            type: string
+          description: This is the placeholder for the next page of results. Send it back
+            to get the next page.
+        - in: query
+          name: pageLimit
+          required: false
+          schema:
+            minLength: 1
+            maxLength: 2
+            title: Page Limit
+            description: Limits the number of results per page
+            default: "25"
+            examples:
+              - "1"
+              - "10"
+              - "99"
+            type: string
+          description: Limits the number of results per page
+        - in: query
+          name: pageSort
+          required: false
+          schema:
+            title: Page Sort
+            description: Sort direction of results.
+            default: DESC
+            examples:
+              - ASC
+              - DESC
+            type: string
+          description: Sort direction of results.
+      security:
+        - JWT: []
+    post:
+      operationId: CreateSim
+      summary: Creates SIM
+      description: Creates a new SIM record
+      tags:
+        - SimTag
+      responses:
+        "200":
+          description: The SIM details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSimResponse"
+              examples:
+                CreateSimResponseExample:
+                  summary: The newly created SIM record
+                  value:
+                    id: 95065ec4-8751-4b02-bcae-078cd4bd22bb
+                    totalDataUsed: 10000
+                    totalDataAvailable: 100000
+                    topUpUrl: https://sim.topupurl.biz/asdlkj2a-asdfadsf-sdf-asd
+                    activatedAt: 2025-04-14T13:00:00:000Z
+                    updatedAt: 2025-04-17T13:59:23:456Z
+        "400":
+          description: The server cannot or will not process the request due to an
+            apparent client error (e.g., malformed request syntax, too large
+            size, invalid request message framing, or deceptive request
+            routing).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSimBadRequestErrorResponse"
+              examples:
+                Bad Request:
+                  summary: Bad request. Check request format.
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/BadRequest
+                      detail: Bad Request
+                      status: 400
+                      title: Bad Request
+                      type: https://my.service.com/errors/BadRequest
+        "403":
+          description: Access Denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSimForbiddenErrorResponse"
+              examples:
+                Forbidden:
+                  summary: Access Denied
+                  value:
+                    error:
+                      "@context": https://github.com/my-service/proto/ProblemDetail
+                      detail: Access denied
+                      status: 403
+                      title: Forbidden
+                      type: https://my.service.com/errors/Forbidden
+      requestBody:
+        required: true
+        description: Creates a new SIM record
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSimRequest"
+            examples:
+              CreateSimRequestExample:
+                summary: Example of a CreateSim request
+                value:
+                  eid: "89042340123945919234851121239899"
+                  puk: "24948087"
+                  firstName: Bill
+                  lastName: Preston
+                  email: billspresetonesquirethethird@wyldstallyns.co
+            description: Creates a new Sim for the team
+      parameters:
+        - in: query
+          name: teamId
+          required: true
+          schema:
+            format: uuid
+            minLength: 36
+            maxLength: 36
+            title: UUID
+            description: a UUID v4 string
+            examples:
+              - 9acbe6f0-ad6e-41b6-b084-5fae92fabdde
+              - eb53b184-a6c2-431c-a03a-ed31f96af958
+            type: string
+          description: a UUID v4 string
+      security:
+        - JWT: []
+tags:
+  - name: SimTag
+    description: SIM Operations
